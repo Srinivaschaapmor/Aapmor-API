@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  namespace: venky
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-rep
+  template:
+    metadata:
+      labels:
+        app: api-rep
+    spec:
+      containers:
+      - name: myc1
+        image: aapmor-360-api
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000 # Example port, replace with your actual port
+        # Add other container configuration options as needed
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-service
+  namespace: venky
+spec:
+  selector:
+    app: api-rep
+  ports:
+  - port: 3000  # Exposed port of the service
+    targetPort: 3000  # Port where your application is running inside the container
+  type: NodePort  # Type of service, can be ClusterIP, NodePort, or LoadBalancer
